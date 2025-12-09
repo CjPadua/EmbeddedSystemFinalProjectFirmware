@@ -197,7 +197,8 @@ void loop() {
     uint16_t dirCode    = regs[1];
     Serial.print(directionName16(dirCode));
 
-    readings += directionName16(dirCode) + "|";
+    readings += directionName16(dirCode);
+    readings += "|";
 
   } else {
     Serial.println("Frame error");
