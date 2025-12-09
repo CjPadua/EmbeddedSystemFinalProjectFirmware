@@ -48,7 +48,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   msg.trim();
 
-  if(msg != "toggle fan") return;
+  if(msg != "toggle light") return;
 
   // toggle fan
   digitalWrite(lightPin, lightState ? LOW : HIGH);
@@ -200,6 +200,7 @@ void ReceiveReadings(void *parameter) {
 
     if(arduinoSerial.available()) {
       readings = arduinoSerial.readStringUntil('\n');
+      readings.trim();
     }
 
     // give time to other tasks
@@ -272,6 +273,7 @@ void setup() {
 
   // light
   pinMode(lightPin, OUTPUT);
+  digitalWrite(lightPin, LOW);
 
   // LED
   pinMode(greenLEDPin, OUTPUT);
