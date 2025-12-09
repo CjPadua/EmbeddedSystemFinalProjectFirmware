@@ -35,7 +35,7 @@ float pressure;
 // ===== DHT11 Sensor =====
 #include <DHT.h>
 
-#define DHTPIN 3          // Pin where the DHT11 is connected
+#define DHTPIN 5          // Pin where the DHT11 is connected
 #define DHTTYPE DHT11     // DHT 11
 DHT dht(DHTPIN, DHTTYPE);
 
@@ -195,7 +195,7 @@ void loop() {
 
   if (readResponse(regs)) {
     uint16_t dirCode    = regs[1];
-    Serial.print(directionName16(dirCode));
+    // Serial.print(directionName16(dirCode));
 
     readings += directionName16(dirCode);
     readings += "|";
@@ -215,9 +215,11 @@ void loop() {
 
   if(isnan(windSpeed)) {
     readingFailed = true;
+    Serial.println("windspeed failed.");
   }
   else {
-    readings += String(windSpeed) + "|";
+    readings += String(windSpeed);
+    readings += "|";
   }
 
 
@@ -226,10 +228,12 @@ void loop() {
   pressure = bmp.readPressure();
 
   if(isnan(pressure) || pressure < 1) {
+    Serial.println("pressure failed.");
     readingFailed = true;
   }
   else {
-    readings += String(pressure) + "|";
+    readings += String(pressure/100.0);
+    readings += "|";
   }
 
   // Temperature and Humidity 
@@ -237,21 +241,28 @@ void loop() {
   humidity = dht.readHumidity();
 
   if(isnan(temperature) || isnan(humidity) || temperature < 1 || humidity < 1) {
+    Serial.println("dht failed.");
     readingFailed = true;
   }
   else {
-    readings += String(temperature) + "|";
-    readings += String(humidity) + "|";
+    readings += String(temperature);
+    readings += "|";
+
+    readings += String(humidity);
+    readings += "|";
+
   }
 
   // Rain Sensor
   int rainSensorValue = analogRead(rainSensorPin);
 
   if(isnan(rainSensorValue) || rainSensorValue < 1) {
+    Serial.println("rain sensor failed.");
     readingFailed = true;
   }
   else {
-    readings += String(rainSensorValue) + "|";
+    readings += String(rainSensorValue);
+    readings += "|";
   }  
   
 
@@ -260,6 +271,7 @@ void loop() {
   int ldrReading = analogRead(ldrPin);
 
   if(isnan(ldrReading) || ldrReading < 1) {
+    Serial.println("ldr failed.");
     readingFailed = true;
   }
   else {
